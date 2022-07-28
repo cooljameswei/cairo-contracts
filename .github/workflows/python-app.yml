@@ -60,15 +60,28 @@ jobs:
   dist_upload:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    needs: [dist]
-    name: Upload to PyPi
+    name: create PR
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v2
       with:
-        name: dist
-        path: dist
-    - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        user: __token__
-        password: ${{ secrets.pypi_token }}
+        python-version: "3.8"
+    - run: python scripts/update_version.py v0.2.2
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+
+
+
+
+    #needs: [dist]
+    #name: Upload to PyPi
+    #steps:
+    #- uses: actions/download-artifact@v2
+    #  with:
+    #    name: dist
+    #    path: dist
+    #- name: Publish package to PyPI
+    #  uses: pypa/gh-action-pypi-publish@master
+    #  with:
+    #    user: __token__
+    #    password: ${{ secrets.pypi_token }}
