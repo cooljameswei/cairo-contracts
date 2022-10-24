@@ -4,8 +4,6 @@ on:
   pull_request:
   workflow_dispatch:
   push:
-    branches:
-    - main
     tags:
     - "v*"
   release:
@@ -87,18 +85,18 @@ jobs:
         name: dist
         path: dist
 
-  dist_upload:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
-    needs: [dist]
-    name: Upload to PyPi
-    steps:
-    - uses: actions/download-artifact@v2
-      with:
-        name: dist
-        path: dist
-    - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        user: __token__
-        password: ${{ secrets.pypi_token }}
+  #dist_upload:
+  #  runs-on: ubuntu-latest
+  #  if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+  #  needs: [dist]
+  #  name: Upload to PyPi
+  #  steps:
+  #  - uses: actions/download-artifact@v2
+  #    with:
+  #      name: dist
+  #      path: dist
+  #  - name: Publish package to PyPI
+  #    uses: pypa/gh-action-pypi-publish@master
+  #    with:
+  #      user: __token__
+  #      password: ${{ secrets.pypi_token }}
